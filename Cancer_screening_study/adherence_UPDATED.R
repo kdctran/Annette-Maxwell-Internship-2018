@@ -1,8 +1,10 @@
 library(readxl)
 library(tidyverse)
 
-adh <- read_excel("CHURCH CHA ADHERENCE/CHA_BL_adherent_clearning.xlsx")
-nonadh <- read_excel("CHURCH CHA ADHERENCE/CHA_BL_nonadherent_cleaning.xlsx")
+nonadh <- read_excel("~/CHURCH CHA ADHERENCE/Baseline Assessment - From CRC-2.xlsx",
+                     sheet = 1)
+adh <- read_excel("~/CHURCH CHA ADHERENCE/Baseline Assessment - From CRC-2.xlsx",
+                  sheet = 2)
 
 colnames(nonadh)
 colnames(adh)
@@ -20,19 +22,19 @@ crc_nonadh <- nonadh %>%
                                 new_col_adh == 1, 1, 0))
 
 fobt <- crc_nonadh %>%
-  select(id, church, sex, age, ever_fobt, last_fobt, fobt_adh, new_fobt_adh) %>%
+  select(id, church, name, sex, age, ever_fobt, last_fobt, fobt_adh, new_fobt_adh) %>%
   filter(new_fobt_adh != fobt_adh)
 
 sig <- crc_nonadh %>%
-  select(id, church, sex, age, ever_sig, last_sig, sig_adh, new_sig_adh) %>%
+  select(id, church, name, sex, age, ever_sig, last_sig, sig_adh, new_sig_adh) %>%
   filter(new_sig_adh != sig_adh)
 
 col <- crc_nonadh %>%
-  select(id, church, sex, age, ever_col, last_col, col_adh, new_col_adh) %>%
+  select(id, church, name, sex, age, ever_col, last_col, col_adh, new_col_adh) %>%
   filter(new_col_adh != col_adh)
 
-test1 <- crc_nonadh %>%
-  select(id, church, sex, age, ever_fobt, last_fobt, fobt_adh, new_fobt_adh,
+crc_nonadh_change <- crc_nonadh %>%
+  select(id, church, name, sex, age, ever_fobt, last_fobt, fobt_adh, new_fobt_adh,
          ever_sig, last_sig, sig_adh, new_sig_adh, ever_col, last_col, col_adh, new_col_adh, CRC_adh, new_CRC_adh) %>%
   filter(new_fobt_adh != fobt_adh |
            new_sig_adh != sig_adh |
@@ -48,6 +50,17 @@ crc_adh <- adh %>%
   mutate(new_CRC_adh = ifelse(new_fobt_adh == 1 |
                                 new_sig_adh == 1 |
                                 new_col_adh == 1, 1, 0))
+fobt <- crc_adh %>%
+  select(id, church, name, sex, age, ever_fobt, last_fobt, fobt_adh, new_fobt_adh) %>%
+  filter(new_fobt_adh != fobt_adh)
+
+sig <- crc_adh %>%
+  select(id, church, name, sex, age, ever_sig, last_sig, sig_adh, new_sig_adh) %>%
+  filter(new_sig_adh != sig_adh)
+
+col <- crc_adh %>%
+  select(id, church, name, sex, age, ever_col, last_col, col_adh, new_col_adh) %>%
+  filter(new_col_adh != col_adh)
 
 test2 <- crc_adh %>%
   select(id, church, name, sex, age, ever_fobt, last_fobt, new_fobt_adh,
@@ -66,7 +79,7 @@ brc_nonadh <- nonadh %>%
   mutate(new_mammo_adh = ifelse(ever_mammo == 1 & last_mammo <= 24 & !is.na(last_mammo), 1, 0))
 
 test1 <- brc_nonadh %>%
-  select(id, church, sex, age, ever_mammo, last_mammo, mammo_adh, new_mammo_adh) %>%
+  select(id, church, name, sex, age, ever_mammo, last_mammo, mammo_adh, new_mammo_adh) %>%
   filter(new_mammo_adh != mammo_adh)
 
 brc_adh <- adh %>%
@@ -76,7 +89,7 @@ brc_adh <- adh %>%
   mutate(new_mammo_adh = ifelse(ever_mammo == 1 & last_mammo <= 24 & !is.na(last_mammo), 1, 0))
 
 test2 <- brc_adh %>%
-  select(id, church, sex, age, ever_mammo, last_mammo, mammo_adh, new_mammo_adh) %>%
+  select(id, church, name, sex, age, ever_mammo, last_mammo, mammo_adh, new_mammo_adh) %>%
   filter(new_mammo_adh != mammo_adh)
 
 brc_test <- bind_rows(test1, test2)
@@ -90,7 +103,7 @@ cvc_nonadh <- nonadh %>%
            (ever_HPV == 1 & last_HPV <= 60 & !is.na(last_HPV)), 1, 0))
 
 test1 <- cvc_nonadh %>%
-  select(id, church, sex, age, ever_pap, last_pap, ever_HPV, last_HPV, hystr,
+  select(id, church, name, sex, age, ever_pap, last_pap, ever_HPV, last_HPV, hystr,
          pap_adh, new_pap_adh) %>%
   filter(new_pap_adh != pap_adh)
 

@@ -57,10 +57,12 @@ fobt <- crc_adh %>%
 sig <- crc_adh %>%
   select(id, church, name, sex, age, ever_sig, last_sig, sig_adh, new_sig_adh) %>%
   filter(new_sig_adh != sig_adh)
+write.csv(sig,'sig_adh.csv')
 
 col <- crc_adh %>%
   select(id, church, name, sex, age, ever_col, last_col, col_adh, new_col_adh) %>%
   filter(new_col_adh != col_adh)
+write.csv(col,'col_adh.csv')
 
 test2 <- crc_adh %>%
   select(id, church, name, sex, age, ever_fobt, last_fobt, new_fobt_adh,
@@ -93,7 +95,7 @@ test2 <- brc_adh %>%
   filter(new_mammo_adh != mammo_adh)
 
 brc_test <- bind_rows(test1, test2)
-write.csv(brc_test,'brc_adh_test.csv')
+write.csv(test2,'test2.csv')
 
 ## CERVICAL CANCER SCREENING
 ## Women 50-65 only, no hysterectomy
@@ -118,7 +120,7 @@ test2 <- cvc_adh %>%
   filter(new_pap_adh != pap_adh)
 
 cvc_test <- bind_rows(test1, test2)
-write.csv(cvc_test,'cvc_adh_test.csv')
+write.csv(test2,'test2.csv')
 
 ## PROSTATE CANCER SCREENING
 ## Men 50-75 only, guideline = discuss prostate screening w/ doctor
@@ -127,4 +129,6 @@ psc_nonadh <- nonadh %>%
 
 test1 <- nonadh %>%
   filter(!is.na(ever_psa_discuss) & sex == "F")
+
+write.csv(test1,'test1.csv')
 
